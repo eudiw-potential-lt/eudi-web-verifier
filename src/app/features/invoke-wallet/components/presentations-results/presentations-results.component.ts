@@ -70,25 +70,36 @@ export class PresentationsResultsComponent implements OnInit {
   }
 
   checkAttestation() {
+    console.log("this.attestations", this.attestations)
     if (this.attestations) {
       let check = this.handleRequestType();
       let attri = this.attestations.reduce((acc: { [key: string]: string[] }, attr) => {
         const key = attr.name;
+        console.log("key", key)
+        console.log("acc[key]", acc[key])
         if (!acc[key]) {
           acc[key] = []
         }
         const attributes = attr.attributes.map((x) => x.key);
+        console.log("attributes", attributes)
 
         acc[key] = attributes;
+        console.log("acc", acc)
         return acc;
       }, {});
 
+      console.log("attri", attri)
       Object.keys(attri).forEach((key) => {
+        console.log("key", key)
+        console.log("check[key]", check[key])
         check[key].forEach((x) => {
+          console.log("x", x)
+          console.log("attri[key]", attri[key])
           if (!attri[key].includes(x)) {
             if (!this.missingAttributes[key]) {
               this.missingAttributes[key] = [];
             }
+            console.log("this.missingAttributes[key]", this.missingAttributes[key])
             this.missingAttributes[key].push(x);
           }
         })
