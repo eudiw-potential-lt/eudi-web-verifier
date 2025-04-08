@@ -50,6 +50,10 @@ export class VerifierEndpointService {
     }
   }
 
+  updateRegistrationDataStatus(transaction_id: string, status: string): Observable<string> {
+    return this.httpService.post(`utilities/registration-data/status/${transaction_id}`, {status: status});
+  }
+
   getsTransactionEventsLogs(transactionId: string): Observable<EventLog[]> {
     return this.httpService.get(`ui/presentations/${transactionId}/events`)
       .pipe(

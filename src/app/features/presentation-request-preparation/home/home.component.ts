@@ -96,7 +96,6 @@ export class HomeComponent implements OnInit {
   }
 
   prepareInitializationRequest(inputDescriptors: InputDescriptor[]): TransactionInitializationRequest {
-    console.log("prepareInitializationRequest")
     return {
       type: 'vp_token',
       presentation_definition: {

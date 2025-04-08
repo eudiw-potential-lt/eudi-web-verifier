@@ -1,19 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
-import { SharedModule } from "@shared/shared.module";
-import { MatExpansionModule } from "@angular/material/expansion";
-import { ConcludedTransaction } from "@core/models/ConcludedTransaction";
-import { PresentationDefinition } from "@core/models/presentation/PresentationDefinition";
-import { ViewAttestationComponent } from "@features/invoke-wallet/components/view-attestation/view-attestation.component";
-import { SharedAttestation, Single } from "@core/models/presentation/SharedAttestation";
-import { WalletResponseProcessorService } from "@features/invoke-wallet/services/wallet-response-processor.service";
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { RequestType } from '@app/core/constants/wallet-data';
+import {CommonModule} from '@angular/common';
+import {Component, inject, Input, OnInit} from '@angular/core';
+import {MatListModule} from '@angular/material/list';
+import {SharedModule} from "@shared/shared.module";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {ConcludedTransaction} from "@core/models/ConcludedTransaction";
+import {PresentationDefinition} from "@core/models/presentation/PresentationDefinition";
+import {ViewAttestationComponent} from "@features/invoke-wallet/components/view-attestation/view-attestation.component";
+import {SharedAttestation, Single} from "@core/models/presentation/SharedAttestation";
+import {WalletResponseProcessorService} from "@features/invoke-wallet/services/wallet-response-processor.service";
+import {MatCardModule} from "@angular/material/card";
+import {MatButtonModule} from "@angular/material/button";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {RequestType} from '@app/core/constants/wallet-data';
 import {LocalStorageService} from "@core/services/local-storage.service";
 import {REGISTRATION_DATA} from "@core/constants/general";
+import {VerifierEndpointService} from "@core/services/verifier-endpoint.service";
 
 @Component({
   selector: 'vc-presentations-results',
@@ -28,7 +29,7 @@ import {REGISTRATION_DATA} from "@core/constants/general";
     MatDialogModule,
     ViewAttestationComponent
   ],
-  providers: [WalletResponseProcessorService],
+  providers: [WalletResponseProcessorService, VerifierEndpointService],
   templateUrl: './presentations-results.component.html',
   styleUrls: ['./presentations-results.component.scss']
 })
@@ -36,7 +37,9 @@ export class PresentationsResultsComponent implements OnInit {
   constructor(
     private readonly responseProcessor: WalletResponseProcessorService,
     private readonly localStorageService: LocalStorageService,
-  ) {}
+    private readonly verifierEndpointService: VerifierEndpointService,
+  ) {
+  }
 
   @Input() concludedTransaction!: ConcludedTransaction;
   @Input() requestType!: RequestType | null;
@@ -104,6 +107,15 @@ export class PresentationsResultsComponent implements OnInit {
 
       // })
       console.log(this.missingAttributes);
+      this.verifierEndpointService.updateRegistrationDataStatus(
+        this.concludedTransaction.transactionId,
+        JSON.stringify({
+          walletResponse: this.concludedTransaction.walletResponse,
+          missingAttributes: JSON.stringify(this.missingAttributes),
+        }))
+        .subscribe(value => {
+          console.log("Final registration data", value)
+        })
     }
   }
 
