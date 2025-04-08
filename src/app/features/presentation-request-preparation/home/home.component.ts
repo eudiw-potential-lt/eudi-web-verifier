@@ -21,6 +21,7 @@ import {VerifierEndpointService} from '@core/services/verifier-endpoint.service'
 import {MatExpansionModule} from '@angular/material/expansion';
 import {LocalStorageService} from "@core/services/local-storage.service";
 import {REGISTRATION_DATA} from "@core/constants/general";
+import {RequestType} from "@core/constants/wallet-data";
 
 export interface RegistrationData {
   readerCountry?: string;
@@ -111,7 +112,7 @@ export class HomeComponent implements OnInit {
     if (this.initializationRequest != null) {
       this.verifierEndpointService.initializeTransaction(
         this.initializationRequest, (_) => {
-          this.navigateService.navigateTo('invoke-wallet');
+          this.navigateService.navigateTo('invoke-wallet', this.testScenario as RequestType);
         },
         this.getRegistrationData());
     } else {
