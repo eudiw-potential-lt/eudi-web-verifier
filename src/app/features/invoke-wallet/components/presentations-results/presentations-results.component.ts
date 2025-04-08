@@ -92,7 +92,7 @@ export class PresentationsResultsComponent implements OnInit {
       Object.keys(attri).forEach((key) => {
         console.log("key", key)
         console.log("check[key]", check[key])
-        check[key].forEach((x) => {
+        check[key]?.forEach((x) => {
           console.log("x", x)
           console.log("attri[key]", attri[key])
           if (!attri[key].includes(x)) {
