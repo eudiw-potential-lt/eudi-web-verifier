@@ -5,7 +5,7 @@ const targetPath = './src/environments/environment.ts';
 require('dotenv').config();
 // `environment.ts` file structure
 const envConfigFile = `export const environment = {
-    apiUrl: '${process.env.DOMAIN_NAME}',
+    apiUrl: '${process.env.API_URL}',
     appName: '${process.env.APP_NAME}'
 };`;
 

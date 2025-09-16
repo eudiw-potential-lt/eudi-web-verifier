@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "npm run config && ng serve --proxy-config src/proxy.conf.json",
     "build": "npm run config && ng build --build-optimizer --configuration=production",
+    "build-docker": "npm run config && ng build --build-optimizer --configuration=$CONFIGURATION --base-href=$BASE_HREF",
     "watch": "npm run config && ng build --watch --configuration=development",
     "config": "node set-env.js",
     "test": "ng test",

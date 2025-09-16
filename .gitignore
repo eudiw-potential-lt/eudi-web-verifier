@@ -62,3 +62,6 @@ cypress/videos/*
 
 reports
 notes.txt
+
+.env
+environments/environment.ts

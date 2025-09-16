@@ -1,28 +1,33 @@
-# http {
-    include /etc/nginx/mime.types;
-    upstream backend {
-        server $API_SERVER;
+upstream backend {
+    server $API_SERVER;
+}
+
+server {
+    listen ${NGINX_PORT};
+    server_name ${NGINX_HOST};
+
+    root /site;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+        sub_filter_types text/xml application/javascript text/javascript;
+        sub_filter 'http://localhost:8080' $API_URL;
+        sub_filter_once on;
+    }
+    location /ui {
+        proxy_pass http://backend;
+    }
+    location /wallet {
+        proxy_pass http://backend;
+    }
+    location /utilities {
+        proxy_pass http://backend;
     }
 
-    server {
-        listen 4300;
-        server_name localhost;
-        root /usr/share/nginx/html;
-        index index.html;
-        location / {
-            try_files $uri $uri/ /index.html;
-            sub_filter_types text/xml application/javascript text/javascript;
-            sub_filter 'http://localhost:8080' $HOST_API;
-            sub_filter_once on;
-        }
-        location /ui {
-            proxy_pass http://backend;
-        }
-        location /wallet {
-            proxy_pass http://backend;
-        }
-        location /utilities {
-            proxy_pass http://backend;
-        }
+    location /healthz {
+        access_log off;
+        return 200 '{"status": "ok";}';
+        add_header Content-Type application/json;
     }
-# }
+}
