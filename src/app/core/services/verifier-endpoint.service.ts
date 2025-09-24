@@ -11,6 +11,7 @@ import {DataService} from "@core/services/data.service";
 import {WalletResponse} from "@core/models/WalletResponse";
 import {EventLog} from "@core/models/EventLog";
 import {RegistrationData} from "@features/presentation-request-preparation/home/home.component";
+import { environment } from '@environments/environment';
 
 @Injectable()
 export class VerifierEndpointService {
@@ -26,7 +27,7 @@ export class VerifierEndpointService {
     if (initializationRequest) {
       const payload: any = {...initializationRequest};
       if (!this.deviceDetectorService.isDesktop()) {
-        payload['wallet_response_redirect_uri_template'] = location.origin + '/get-wallet-code?response_code={RESPONSE_CODE}';
+        payload['wallet_response_redirect_uri_template'] = location.origin + `${environment.basePath}/get-wallet-code?response_code={RESPONSE_CODE}`;
       }
       payload['registration_data'] = registrationData;
 
