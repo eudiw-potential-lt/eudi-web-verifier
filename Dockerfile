@@ -9,14 +9,15 @@ ARG APP_NAME "Verifier"
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app
-
-RUN yarn install
 COPY . /usr/src/app
-RUN rm -rf dist
-RUN yarn run build-docker
+
+RUN yarn install && \
+    rm -rf dist && \
+    yarn run build-docker && \
+    rm -rf node_modules
 
 # Stage 2
-FROM nginx
+FROM nginx:alpine
 
 ENV API_SERVER "localhost:4200"
 ENV API_URL "https://${API_SERVER}"
